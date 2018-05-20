@@ -3,6 +3,7 @@
 
 import requests
 import json
+import requests.exceptions
 import time
 import sys
 
@@ -16,15 +17,43 @@ ROOM = """
 """
 ROOM = json.loads(ROOM)
 ROOM = ROOM['data']
+max_retry = 5       # 连接重试次数
+
 
 
 def get_seat_id(loc, token):
     local_room = loc[:-3]
     local_seat = loc[-3:]
-    room_id = [x for x in ROOM if x['room'] == local_room][0]['roomId']
+    room_id = [x for x in ROOM if x["room"] == local_room][0]['roomId']
     room_layer_url = 'http://seat.ujn.edu.cn/rest/v2/room/layoutByDate/' + str(room_id) + '/2017-01-2' \
                                                                                           '2?token=' + token
-    r = requests.get(room_layer_url)
+    t = 0
+    while t < max_retry:
+        if t != 0:
+            time.sleep(3)
+        try:
+            r = requests.get(room_layer_url, timeout=3)
+        except requests.exceptions.Timeout as e:
+            print("连接超时....")
+            # print(str(e))
+            t += 1
+        except requests.exceptions.ConnectionError as e:
+            print("网络异常")
+            # print(str(e))
+            t += 1
+        except requests.exceptions.HTTPError as e:
+            print("返回了不成功的状态码")
+            # print(str(e))
+            t += 1
+        except Exception as e:
+            print("出现了意料之外的错误")
+            print(str(e))
+            t += 1
+        else:
+            t = max_retry + 1
+    if t == max_retry:
+        print("超过最大重试次数")
+        return -1
     layer = json.loads(r.text)
     layer = layer['data']['layout']
 
@@ -48,12 +77,39 @@ http://seat.ujn.edu.cn/rest/auth?username=220140421164&password=220140421164
 
 
 def getToken(username, password):
+    # 登录获取token
     url = 'http://seat.ujn.edu.cn/rest/auth'
     param = {
         'username': username,
         'password': password
     }
-    r = requests.get(url, params=param)
+    t = 0
+    while t < max_retry:
+        if t != 0:
+            time.sleep(3)
+        try:
+            r = requests.get(url, params=param, timeout=3)
+        except requests.exceptions.Timeout as e:
+            print("token获取连接超时....")
+            # print(str(e))
+            t += 1
+        except requests.exceptions.ConnectionError as e:
+            print("网络异常")
+            # print(str(e))
+            t += 1
+        except requests.exceptions.HTTPError as e:
+            print("返回了不成功的状态码")
+            # print(str(e))
+            t += 1
+        except Exception as e:
+            print("出现了意料之外的错误")
+            print(str(e))
+            t += 1
+        else:
+            t = max_retry + 1
+    if t == max_retry:
+        print("超过最大重试次数")
+        return -1
     resp = json.loads(r.text)
     if resp['status'] == 'fail':
         print(username + '   ' + r.text)
@@ -69,6 +125,7 @@ POST `token=HLIU9P4HYW01214703&startTime=960&endTime=1200&seat=15343&date=2018-0
 
 
 def freeBook(token, startTime, endTime, seat):
+    # 预约座位
     tomorrow = time.strftime("%Y-%m-%d", time.localtime(86400 + time.time()))
     url = 'http://seat.ujn.edu.cn/rest/v2/freeBook'
     para = {
@@ -78,7 +135,33 @@ def freeBook(token, startTime, endTime, seat):
         'seat': seat,
         'date': tomorrow
     }
-    r = requests.post(url, data=para)
+    t = 0
+    while t < max_retry:
+        if t != 0:
+            time.sleep(3)
+        try:
+            r = requests.post(url, data=para, timeout=3)
+        except requests.exceptions.Timeout as e:
+            print("freebook连接超时....")
+            # print(str(e))
+            t += 1
+        except requests.exceptions.ConnectionError as e:
+            print("网络异常")
+            # print(str(e))
+            t += 1
+        except requests.exceptions.HTTPError as e:
+            print("返回了不成功的状态码")
+            # print(str(e))
+            t += 1
+        except Exception as e:
+            print("出现了意料之外的错误")
+            print(str(e))
+            t += 1
+        else:
+            t = max_retry + 1
+    if t == max_retry:
+        print("超过最大重试次数")
+        return -1
     resp = json.loads(r.text)
     if resp['status'] == 'fail':
         print(r.text)
@@ -90,10 +173,12 @@ def freeBook(token, startTime, endTime, seat):
 if __name__ == '__main__':
     if sys.argv.__len__() <= 1:
         print("请传入配置文件名称")
-        sys.exit()
-    filename = sys.argv[1]
-    now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
-    print('----------------------' + now + '-----------------------')
+        # sys.exit()
+    # filename = sys.argv[1]
+    filename = 'con.json'
+    # 打印开始时间
+    start = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+    print('----------------------' + start + '-----------------------')
     f = open(sys.path[0] + '/' + filename, 'r', encoding='utf8')
     info = json.load(f)
     # print(info)
@@ -102,6 +187,7 @@ if __name__ == '__main__':
         if i['enable'] == 'false':
             continue
         token = getToken(i['username'], i['password'])
+        status = 0
         if token != -1:
             seat_id = get_seat_id(i['seat'], token)
             if seat_id != -1:
@@ -112,3 +198,7 @@ if __name__ == '__main__':
             print(i['name'] + ' 成功预约 ' + i['seat'])
         else:
             print(i['name'] + ' 预约失败\n')
+
+    # 打印结束时间
+    end = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+    print('----------------------' + end + '-----------------------')
