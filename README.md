@@ -21,6 +21,7 @@ api是从Android端抓包获取
 {
   "stu": [
     {
+      "enable" : "true",
       "name": "路人甲",
       "username": "220140421164",
       "password": "xxx",
@@ -29,6 +30,7 @@ api是从Android端抓包获取
       "endTime": "720"
     },
     {
+      "enable" : "true",
       "name": "路人乙",
       "username": "220151222156",
       "password": "xxx",
@@ -81,9 +83,6 @@ python freebook.py config.json
 5     5    *    *    1 /usr/bin/python3 /root/seatUJN/freebook.py config2.json >> /root/seatUJN/freebook.log
 ```
 
-### locToSeat.py
-把诸如`第一阅览室001号`转换seatId`22558`
-
 ### seatDaemon.py
 不摇碧莲守护进程,可以设置每小时运行一次,如果有到期的预约则取消当前预约,重新预约一小时后的时间,结束时间不变.
 比如你预约7:59-11:59,在8:03运行的时候发现还没有签到，则取消当前预约并帮你预约8:59-11:59的时间。
@@ -91,6 +90,9 @@ python freebook.py config.json
 **为什么是7:59而不是8:00 ?**
 
 如果是8:00则在8:03-9:00之间，仍有人可以预约`当前-9:00`这不到一小时的时间。
+
+### common.py
+一些公用函数
 
 ### 我的自动任务
 
