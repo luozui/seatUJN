@@ -98,7 +98,7 @@ def get_history(token):
                 'seat': seat,
                 'date': nowDate
             }
-            r = post_url(freeBookUrl)
+            r = post_url(freeBookUrl, param)
             resp2 = json.loads(r.text)
             if resp2['status'] == 'fail':
                 print('续约失败  ，' + r.text)
@@ -115,6 +115,7 @@ if __name__ == '__main__':
         print("请传入配置文件名称")
         sys.exit()
     filename = sys.argv[1]
+    # filename = "configSeatDaemon.log"
     # 打印开始时间
     start = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
     print('----------------------' + start + '-----------------------')
