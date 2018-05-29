@@ -94,6 +94,10 @@ python freebook.py config.json
 ### common.py
 一些公用函数
 
+### checkin.py
+签到，但必须连接图书馆的wifi
+适用于留一个树莓派或笔记本或手机在图书馆的情况下
+
 ### 我的自动任务
 
 ```shell

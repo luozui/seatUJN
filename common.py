@@ -8,7 +8,7 @@ import time
 max_retry = 5  # 最大重试次数
 
 
-def post_url(url, para={}, t_out=3):
+def post_url(url, para, t_out=3):
     """
     构造post请求
     :param url:
@@ -107,7 +107,8 @@ def get_seat_id(loc, token):
     layer = json.loads(r.text)
     layer = layer['data']['layout']
 
-    seat_id = [x for x in layer if layer[x]['type'] == 'seat' and layer[x]['name'] == local_seat]
+    seat_id = [x for x in layer if layer[x]['type']
+               == 'seat' and layer[x]['name'] == local_seat]
     if seat_id.__len__() == 0:
         print('找不到' + loc)
         return -1

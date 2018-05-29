@@ -1,7 +1,9 @@
 # !/usr/bin/env python
 # coding=utf-8
 
-import json, time, sys
+import json
+import time
+import sys
 from common import get_seat_id, get_token, post_url
 
 # 配置文件作为参数传入预约第二天的座位

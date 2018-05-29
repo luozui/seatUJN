@@ -16,7 +16,8 @@ max_retry = 5
 
 def get_local_date():
     localtime = time.localtime(time.time())
-    ans = str(localtime.tm_year) + '-' + str(localtime.tm_mon) + '-' + str(localtime.tm_mday)
+    ans = str(localtime.tm_year) + '-' + \
+        str(localtime.tm_mon) + '-' + str(localtime.tm_mday)
     return ans
 
 
@@ -77,7 +78,8 @@ def get_history(token):
             need_free = True
             # cancle the reservation
             # http://seat.ujn.edu.cn/rest/v2/cancel/3669325?token=75FG9DTUZA01210118
-            cancleUrl = 'http://seat.ujn.edu.cn/rest/v2/cancel/' + str(raw['id']) + '?token=' + token
+            cancleUrl = 'http://seat.ujn.edu.cn/rest/v2/cancel/' + \
+                str(raw['id']) + '?token=' + token
             r1 = get_url(cancleUrl)
             resp1 = json.loads(r1.text)
             if resp1['status'] == 'fail':
