@@ -50,7 +50,7 @@ if __name__ == '__main__':
     filename = sys.argv[1]
     # 打印开始时间
     start = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
-    print('----------------------' + start + '-----------------------')
+    print('----------------------' + start + '----start-------------------')
     f = open(sys.path[0] + '/' + filename, 'r', encoding='utf8')
     info = json.load(f)
     # print(info)
@@ -73,4 +73,4 @@ if __name__ == '__main__':
 
     # 打印结束时间
     end = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
-    print('----------------------' + end + '-----------------------')
+    print('----------------------' + end + '----end-------------------')
