@@ -9,7 +9,9 @@ from common import get_seat_id, get_token, post_url
 # 配置文件作为参数传入预约第二天的座位
 
 
+
 max_retry = 5  # 连接重试次数
+early_times = 0 # 未到系统开放时间尝试预约次数计数器
 '''
 http://seat.ujn.edu.cn/rest/auth?username=220140421164&password=220140421164
 获取token                                    
@@ -23,6 +25,7 @@ POST `token=HLIU9P4HYW01214703&startTime=960&endTime=1200&seat=15343&date=2018-0
 
 
 def freeBook(token, startTime, endTime, seat):
+    global early_times
     # 预约座位
     tomorrow = time.strftime("%Y-%m-%d", time.localtime(86400 + time.time()))
     url = 'http://seat.ujn.edu.cn/rest/v2/freeBook'
@@ -37,6 +40,16 @@ def freeBook(token, startTime, endTime, seat):
     r = post_url(url, para)
     resp = json.loads(r.text)
     if resp['status'] == 'fail':
+        if resp['message'] == '系统可预约时间为 05:00 ~ 23:00':
+            print('还未到预定时间，请等待 3秒')
+            time.sleep(1)
+            print('还未到预定时间，请等待 2秒')
+            time.sleep(1)
+            print('还未到预定时间，请等待 1秒')
+            time.sleep(1)
+            early_times += 1
+            print('已经尝试重连 %d 次' % early_times)
+            freeBook(token, startTime, endTime, seat)
         print(r.text)
         return -1
     else:
