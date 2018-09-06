@@ -19,7 +19,7 @@ def post_url(url, para, t_out=3):
     t = 0
     while t < max_retry:
         if t != 0:
-            time.sleep(3)
+            time.sleep(1)
         try:
             r = requests.post(url, data=para, timeout=3)
         except requests.exceptions.Timeout as e:
@@ -58,7 +58,7 @@ def get_url(url, parameters={}, t_out=3):
     t = 0
     while t < max_retry:
         if t != 0:
-            time.sleep(3)
+            time.sleep(1)
         try:
             r = requests.get(url, params=parameters, timeout=t_out + t)
         except requests.exceptions.Timeout as e:
