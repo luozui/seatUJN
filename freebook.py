@@ -45,9 +45,17 @@ def freeBook(token, startTime, endTime, seat):
             early_times += 1
             print('已经尝试重连 %d 次' % early_times)
             freeBook(token, startTime, endTime, seat)
+        if resp['message'] == 'System Maintenance':
+            print('系统维护中，请等待 10秒')
+            time.sleep(10)
+            early_times += 1
+            print('已经尝试重连 %d 次' % early_times)
+            freeBook(token, startTime, endTime, seat)
         print(r.text)
         return -1
+
     else:
+        early_times = 0
         return 1
 
 
