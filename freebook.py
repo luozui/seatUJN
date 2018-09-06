@@ -38,19 +38,15 @@ def freeBook(token, startTime, endTime, seat):
 
     r = post_url(url, para)
     resp = json.loads(r.text)
+    while resp['message'] == '系统可预约时间为 05:00 ~ 23:00':
+        print('还未到预定时间，请等待 1秒')
+        time.sleep(1)
+        early_times += 1
+        print('已经尝试重连 %d 次' % early_times)
+        r = post_url(url, para)
+        resp = json.loads(r.text)
+
     if resp['status'] == 'fail':
-        if resp['message'] == '系统可预约时间为 05:00 ~ 23:00':
-            print('还未到预定时间，请等待 1秒')
-            time.sleep(1)
-            early_times += 1
-            print('已经尝试重连 %d 次' % early_times)
-            freeBook(token, startTime, endTime, seat)
-        if resp['message'] == 'System Maintenance':
-            print('系统维护中，请等待 10秒')
-            time.sleep(10)
-            early_times += 1
-            print('已经尝试重连 %d 次' % early_times)
-            freeBook(token, startTime, endTime, seat)
         print(r.text)
         return -1
 

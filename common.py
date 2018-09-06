@@ -56,7 +56,7 @@ def get_url(url, parameters={}, t_out=3):
     """
 
     t = 0
-    while t < 5:
+    while t < max_retry:
         if t != 0:
             time.sleep(3)
         try:
@@ -125,8 +125,14 @@ def get_token(username, password):
         'password': password
     }
     r = get_url(url, param)
-
     resp = json.loads(r.text)
+
+    while resp['message'] == 'System Maintenance':
+        print("系统维护中,等待10秒重试")
+        time.sleep(1)
+        r = get_url(url, param)
+        resp = json.loads(r.text)
+
     if resp['status'] == 'fail':
         print(username + '   ' + r.text)
         return -1
