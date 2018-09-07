@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3 -u
 # coding=utf-8
 import requests
 import json
 import requests.exceptions
 import time
 
-max_retry = 5  # 最大重试次数
+max_retry = 8  # 最大重试次数
 
 
 def post_url(url, para, t_out=3):
@@ -21,7 +21,7 @@ def post_url(url, para, t_out=3):
         if t != 0:
             time.sleep(1)
         try:
-            r = requests.post(url, data=para, timeout=3)
+            r = requests.post(url, data=para, timeout=4)
         except requests.exceptions.Timeout as e:
             print("freebook连接超时....")
             # print(str(e))
@@ -60,7 +60,7 @@ def get_url(url, parameters={}, t_out=3):
         if t != 0:
             time.sleep(1)
         try:
-            r = requests.get(url, params=parameters, timeout=t_out + t)
+            r = requests.get(url, params=parameters, timeout=t_out)
         except requests.exceptions.Timeout as e:
             print("连接超时....")
             # print(str(e))
@@ -94,10 +94,11 @@ ROOM = """
 """
 ROOM = json.loads(ROOM)
 ROOM = ROOM['data']
-max_retry = 5  # 连接重试次数
+max_retry = 8  # 连接重试次数
 
 
 def get_seat_id(loc, token):
+    print("得到座位号ID...")
     local_room = loc[:-3]
     local_seat = loc[-3:]
     room_id = [x for x in ROOM if x["room"] == local_room][0]['roomId']
@@ -119,6 +120,7 @@ def get_seat_id(loc, token):
 
 def get_token(username, password):
     # 登录获取token
+    print("正在登陆...")
     url = 'http://seat.ujn.edu.cn/rest/auth'
     param = {
         'username': username,
@@ -129,7 +131,7 @@ def get_token(username, password):
 
     while resp['message'] == 'System Maintenance':
         print("系统维护中,等待10秒重试")
-        time.sleep(1)
+        time.sleep(10)
         r = get_url(url, param)
         resp = json.loads(r.text)
 

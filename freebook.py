@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+# !/usr/bin/env python3 -u
 # coding=utf-8
 
 import json
@@ -24,8 +24,8 @@ POST `token=HLIU9P4HYW01214703&startTime=960&endTime=1200&seat=15343&date=2018-0
 
 
 def freeBook(token, startTime, endTime, seat):
-    global early_times
     # 预约座位
+    print("预约座位")
     tomorrow = time.strftime("%Y-%m-%d", time.localtime(86400 + time.time()))
     url = 'http://seat.ujn.edu.cn/rest/v2/freeBook'
     para = {
@@ -38,6 +38,7 @@ def freeBook(token, startTime, endTime, seat):
 
     r = post_url(url, para)
     resp = json.loads(r.text)
+    early_times = 0
     while resp['message'] == '系统可预约时间为 05:00 ~ 23:00':
         print('还未到预定时间，请等待 1秒')
         time.sleep(1)
@@ -47,11 +48,11 @@ def freeBook(token, startTime, endTime, seat):
         resp = json.loads(r.text)
 
     if resp['status'] == 'fail':
-        print(r.text)
+
+        print("预约失败#############" + resp['message'])
         return -1
 
     else:
-        early_times = 0
         return 1
 
 
@@ -70,6 +71,7 @@ if __name__ == '__main__':
     for i in info['stu']:
         if i['enable'] == 'false':
             continue
+        print("正在为 %s 预约 %s" % (i['name'], i['seat']))
         token = get_token(i['username'], i['password'])
         status = 0
         if token != -1:
@@ -81,8 +83,9 @@ if __name__ == '__main__':
         if token != -1 and status != -1:
             print(i['name'] + ' 成功预约 ' + i['seat'])
         else:
-            print(i['name'] + ' 预约失败\n')
+            # print(i['name'] + ' 预约失败')
+            print("")
 
-    # 打印结束时间
+            # 打印结束时间
     end = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
-    print('----------------------' + end + '----end-------------------')
+    print('----------------------' + end + '----end-------------------\n\n\n')
