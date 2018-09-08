@@ -106,7 +106,7 @@ def get_seat_id(loc, token):
                                                                                           '2?token=' + token
     r = get_url(room_layer_url)
     try:
-        resp = json.loads(r.text)
+        layer = json.loads(r.text)
     except:
         return -1
     layer = layer['data']['layout']
