@@ -105,7 +105,10 @@ def get_seat_id(loc, token):
     room_layer_url = 'http://seat.ujn.edu.cn/rest/v2/room/layoutByDate/' + str(room_id) + '/2017-01-2' \
                                                                                           '2?token=' + token
     r = get_url(room_layer_url)
-    layer = json.loads(r.text)
+    try:
+        resp = json.loads(r.text)
+    except:
+        return -1
     layer = layer['data']['layout']
 
     seat_id = [x for x in layer if layer[x]['type']
@@ -127,14 +130,20 @@ def get_token(username, password):
         'password': password
     }
     r = get_url(url, param)
-    resp = json.loads(r.text)
 
+    try:
+        resp = json.loads(r.text)
+    except:
+        return -1
     while resp['message'] == 'System Maintenance':
         print("系统维护中,等待10秒重试")
         time.sleep(10)
         r = get_url(url, param)
-        resp = json.loads(r.text)
 
+        try:
+            resp = json.loads(r.text)
+        except:
+            return -1
     if resp['status'] == 'fail':
         print(username + '   ' + r.text)
         return -1
