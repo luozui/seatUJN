@@ -96,6 +96,7 @@ if __name__ == '__main__':
             continue
         if token != -1 and status != -1:
             print(i['name'] + ' 成功预约 ' + i['seat'])
+            print("")
         else:
             print(i['name'] + ' 预约失败')
             print("")
