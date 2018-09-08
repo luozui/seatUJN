@@ -80,10 +80,13 @@ if __name__ == '__main__':
                 status = freeBook(token, i['startTime'], i['endTime'], seat_id)
             else:
                 status = -1
+                print("得到座位号失败")
+        else:
+            print("登录失败")
         if token != -1 and status != -1:
             print(i['name'] + ' 成功预约 ' + i['seat'])
         else:
-            # print(i['name'] + ' 预约失败')
+            print(i['name'] + ' 预约失败')
             print("")
 
             # 打印结束时间
