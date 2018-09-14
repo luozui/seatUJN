@@ -81,6 +81,7 @@ if __name__ == '__main__':
         if i['enable'] == 'false':
             continue
         print("正在为 %s 预约 %s" % (i['name'], i['seat']))
+        time.sleep(3)
         token = get_token(i['username'], i['password'])
         status = 0
         if token != -1:
