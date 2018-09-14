@@ -12,9 +12,15 @@ from common import get_token, get_url
 
 def checkin(token):
     url = 'http://seat.ujn.edu.cn/rest/v2/checkIn?token='
-    r = get_url(url=url + token)
+    checkin_url = url+token
+    header = {'X-Forwarded-For': '10.167.135.34'}
+    message = requests.get(checkin_url,headers=header)
+    print(message.text)
+    #r = get_url(url=url + token)
     # r = requests.get(url=url + token)
-    print(r.text + '\n')
+    #print(r.text + '\n')
+
+
 
 
 if __name__ == '__main__':
