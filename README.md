@@ -97,7 +97,8 @@ python freebook.py config.json
 ### checkin.py
 ~~签到，但必须连接图书馆的wifi~~
 ~~适用于留一个树莓派或笔记本或手机在图书馆的情况下~~
-可以外网签到
+
+可以外网签到，需配置checkin.py 里的 header = {'X-Forwarded-For': '10.167.135.34'}，IP为在你能签到的环境下的手机的IP地址
 
 ### 我的自动任务
 
