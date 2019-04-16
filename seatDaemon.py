@@ -78,7 +78,7 @@ def get_history(token):
             need_free = True
             # cancle the reservation
             # http://seat.ujn.edu.cn/rest/v2/cancel/3669325?token=75FG9DTUZA01210118
-            cancleUrl = 'http://seat.ujn.edu.cn/rest/v2/cancel/' + \
+            cancleUrl = 'http://seatlib.hpu.edu.cn/rest/v2/cancel/' + \
                 str(raw['id']) + '?token=' + token
             r1 = get_url(cancleUrl)
             resp1 = json.loads(r1.text)
@@ -88,7 +88,7 @@ def get_history(token):
             # 预约后面的时间
             # http://seat.ujn.edu.cn/rest/v2/freeBook
             # POST `token=HLIU9P4HYW01214703&startTime=960&endTime=1200&seat=15343&date=2018-01-21`
-            freeBookUrl = 'http://seat.ujn.edu.cn/rest/v2/freeBook'
+            freeBookUrl = 'http://seatlib.hpu.edu.cn/rest/v2/freeBook'
             seat = get_seat_id(raw['loc'][10:-1], token)
             if seat == -1:
                 print("查找座位" + raw['loc'] + '失败')
