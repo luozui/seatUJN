@@ -13,7 +13,7 @@ max_retry = 5  # 连接重试次数
 early_times = 0  # 未到系统开放时间尝试预约次数计数器
 '''
 http://seat.ujn.edu.cn/rest/auth?username=xxx&password=xxx
-获取token                                    
+获取token
 
 {"status":"success","data":{"token":"T58UTCARF601204212"},"code":"0","message":""}
 {"status":"fail","code":"13","message":"登录失败: 密码不正确","data":null}
@@ -27,7 +27,7 @@ def freeBook(token, startTime, endTime, seat):
     # 预约座位
     print("预约座位")
     tomorrow = time.strftime("%Y-%m-%d", time.localtime(86400 + time.time()))
-    url = 'http://seat.ujn.edu.cn/rest/v2/freeBook'
+    url = 'http://seatlib.hpu.edu.cn/rest/v2/freeBook'
     para = {
         'token': token,
         'startTime': startTime,
