@@ -11,7 +11,7 @@ from common import get_token, get_url
 
 
 def checkin(token):
-    url = 'http://seat.ujn.edu.cn/rest/v2/checkIn?token='
+    url = 'http://seatlib.hpu.edu.cn/rest/v2/checkIn?token='
     checkin_url = url+token
     header = {'X-Forwarded-For': '10.167.135.34'}
     message = requests.get(checkin_url,headers=header)
